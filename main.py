@@ -10,7 +10,7 @@ root = Tk()
 root.geometry("512x512")
 root.title('Juegos')
 #Canvas
-img = ImageTk.PhotoImage(Image.open("./canvasBackgound.jpg").resize((512,512)))
+img = ImageTk.PhotoImage(Image.open("./imagenes/canvasBackgound.jpg").resize((512,512)))
 canvas = tk.Canvas(root, width=512, height=512)
 canvas.create_image(0, 0, anchor=tk.NW, image=img)
 canvas.pack()
