@@ -42,7 +42,8 @@ def juego1():
   juego1root = Tk()
   juego1root.geometry("512x512")
   juego1root.title('Piedra, papel, tijeras')
-  #salirbuton = ttk.Button(juego1root, text="Salir", command=juego1root.destroy).pack()
+  global canvas, player_option, computer_option
+
   canvas = Canvas(
     juego1root,
     bg="#FFFFFF",
@@ -63,7 +64,7 @@ def juego1():
     font=("Inter", 20 * -1)
   )
 
-  canvas.create_text(
+  txt = canvas.create_text(
     221.0,
     318.0,
     anchor="nw",
@@ -82,16 +83,16 @@ def juego1():
   )
 
   image_image_1 = PhotoImage(
-    file="./Imagenes/image_1.png")
-  image_1 = canvas.create_image(
+    file="./Imagenes/empty.png")
+  player_option = canvas.create_image(
     105.0,
     194.0,
     image=image_image_1
   )
 
   image_image_2 = PhotoImage(
-    file="./Imagenes/image_2.png")
-  image_2 = canvas.create_image(
+    file="./Imagenes/empty.png")
+  computer_option = canvas.create_image(
     393.0,
     194.0,
     image=image_image_2
@@ -103,7 +104,7 @@ def juego1():
     image=button_image_1,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_1 clicked"),
+    command=lambda: canvas.itemconfig(txt, text=jugar("Piedra")),
     relief="flat"
   )
   button_1.place(
@@ -119,7 +120,7 @@ def juego1():
     image=button_image_2,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_2 clicked"),
+    command=lambda: canvas.itemconfig(txt, text=jugar("Papel")),
     relief="flat"
   )
   button_2.place(
@@ -135,7 +136,7 @@ def juego1():
     image=button_image_3,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_3 clicked"),
+    command=lambda: canvas.itemconfig(txt, text=jugar("Tijeras")),
     relief="flat"
   )
   button_3.place(
@@ -145,6 +146,26 @@ def juego1():
     height=44.0
   )
   juego1root.mainloop()
+
+def jugar(opcion_jugador):
+  global newImagePlayer, newImageComputer
+  opciones = ['Piedra', 'Papel', 'Tijeras']
+  opcion_computadora = random.choice(opciones)
+  newImagePlayer = PhotoImage(file="./Imagenes/" + opcion_jugador.lower() + ".png")
+  newImageComputer = PhotoImage(file="./Imagenes/" + opcion_computadora.lower() + ".png")
+  # Actualiza las imágenes en el canvas
+  canvas.itemconfig(player_option, image=newImagePlayer)
+  canvas.itemconfig(computer_option, image=newImageComputer)
+  if opcion_jugador == opcion_computadora:
+    resultado = "¡Empate!"
+  elif (opcion_jugador == "Piedra" and opcion_computadora == "Tijeras") or \
+          (opcion_jugador == "Papel" and opcion_computadora == "Piedra") or \
+          (opcion_jugador == "Tijeras" and opcion_computadora == "Papel"):
+    resultado = "¡Ganaste!"
+  else:
+    resultado = "¡Perdiste!"
+
+  return resultado
 
 
 def juego2():
