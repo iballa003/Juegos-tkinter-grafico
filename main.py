@@ -2,7 +2,6 @@ from tkinter import *
 from tkinter import ttk
 from PIL import Image, ImageTk
 import tkinter as tk
-import os
 import random
 
 
@@ -214,12 +213,36 @@ def juego2():
 
   juego2.mainloop()
 
+def comprobar_numero(numero_oculto, entrada):
+  global intentos_restantes, button_comprobar
+
+  print(numero_oculto)
+  if(entrada.get().isnumeric()):
+    if(int(entrada.get()) > numero_oculto):
+      intentos_restantes -= 1
+      try_label.config(text=f"Tú número es mayor. Te quedan {intentos_restantes} intentos.")
+    elif(int(entrada.get()) < numero_oculto):
+      intentos_restantes -= 1
+      try_label.config(text=f"Tú número es menor. Te quedan {intentos_restantes} intentos.")
+    else:
+      try_label.config(text=f"Has adivinado el número.")
+      button_comprobar["state"] = "disabled"
+
+    if(intentos_restantes <= 0):
+      button_comprobar["state"] = "disabled"
+
+
 def juego3():
   root.destroy()
+  global intentos_restantes, try_label, button_comprobar
   juego3 = Tk()
   juego3.geometry("512x512")
   juego3.resizable(False, False)
   juego3.title('Adivina el número')
+
+  # Generar un número aleatorio entre 0 y 200
+  numero_aleatorio = random.randint(0, 200)
+  intentos_restantes = 4
 
   frame = tk.Frame(juego3, width=512, height=512)
   frame.place(x=0, y=0)
@@ -239,9 +262,8 @@ def juego3():
   try_label.place(x=190, y=270)
   ttk.Separator(frame).place(x=0, y=310, relwidth=1)
 
-  button_corregir = Button(frame, text="Comprobar", width=20)
-                           #command=lambda: corregir_respuestas(palabras_mostradas, entradas))
-  button_corregir.place(x=195, y=330)
+  button_comprobar = Button(frame, text="Comprobar", width=20, command=lambda: comprobar_numero(numero_aleatorio, entrada))
+  button_comprobar.place(x=195, y=330)
 
   juego3.mainloop()
 
