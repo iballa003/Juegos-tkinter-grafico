@@ -104,7 +104,7 @@ def juego1():
     image=button_image_1,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: canvas.itemconfig(txt, text=jugar("Piedra")),
+    command=lambda: canvas.itemconfig(txt, text=comprobar_resultado("Piedra")),
     relief="flat"
   )
   button_1.place(
@@ -120,7 +120,7 @@ def juego1():
     image=button_image_2,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: canvas.itemconfig(txt, text=jugar("Papel")),
+    command=lambda: canvas.itemconfig(txt, text=comprobar_resultado("Papel")),
     relief="flat"
   )
   button_2.place(
@@ -136,7 +136,7 @@ def juego1():
     image=button_image_3,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: canvas.itemconfig(txt, text=jugar("Tijeras")),
+    command=lambda: canvas.itemconfig(txt, text=comprobar_resultado("Tijeras")),
     relief="flat"
   )
   button_3.place(
@@ -147,7 +147,7 @@ def juego1():
   )
   juego1root.mainloop()
 
-def jugar(opcion_jugador):
+def comprobar_resultado(opcion_jugador):
   global newImagePlayer, newImageComputer
   opciones = ['Piedra', 'Papel', 'Tijeras']
   opcion_computadora = random.choice(opciones)
@@ -167,33 +167,53 @@ def jugar(opcion_jugador):
 
   return resultado
 
+words = {"hello": "hola", "beach": "playa", "keyboard": "teclado", "computer": "ordenador", "mouse": "ratón",
+          "wall": "pared","light": "luz", "window": "ventana", "chair": "silla","bag": "bolsa","table": "mesa", "cat": "gato", "shoes": "zapato",
+          "hair": "pelo", "eyes": "ojos", "book": "libro","classroom": "clase","weather": "clima", "sun": "sol", "moon": "luna"}
 
+
+def corregir_respuestas(palabras_mostradas,entradas):
+  correctas = 0
+  for i, key in enumerate(palabras_mostradas):
+    respuesta = entradas[i].get().strip().lower()
+    if respuesta == words[key]:
+      correctas += 1
+  resultado_label.config(text=f"Resultado: tienes {correctas} correctas.")
+
+
+# Seleccionar 5 palabras aleatorias
 def juego2():
+  global resultado_label
   root.destroy()
   juego2 = Tk()
   juego2.geometry("512x512")
   juego2.title('Traduce del ingles')
+
+  palabras_mostradas = random.sample(list(words.keys()), 5)
+
   frame = tk.Frame(juego2, width=512, height=512)
   frame.place(x=0, y=0)
-  text_label_1 = tk.Label(frame, text="Texto1")
-  text_label_1.place(x=160, y=55)
-  Entry(frame, textvariable="").place(x=220, y=55)
-  text_label_2 = tk.Label(frame, text="Texto2")
-  text_label_2.place(x=160, y=95)
-  Entry(frame, textvariable="").place(x=220, y=95)
-  text_label_3 = tk.Label(frame, text="Texto3")
-  text_label_3.place(x=160, y=135)
-  Entry(frame, textvariable="").place(x=220, y=135)
-  text_label_4 = tk.Label(frame, text="Texto4")
-  text_label_4.place(x=160, y=181)
-  Entry(frame, textvariable="").place(x=220, y=181)
-  text_label_5 = tk.Label(frame, text="Texto5")
-  text_label_5.place(x=160, y=221)
-  Entry(frame, textvariable="").place(x=220, y=221)
+
+  entradas = []
+  for i, palabra in enumerate(palabras_mostradas):
+    text_label = tk.Label(frame, text=palabra)
+    text_label.place(x=160, y=55 + i * 40)
+
+    entrada = tk.Entry(frame)
+    entrada.place(x=220, y=55 + i * 40)
+    entradas.append(entrada)
+
   ttk.Separator(frame).place(x=0, y=260, relwidth=1)
-  Button(frame, text="Corregir", width=20).place(x=195, y=298)
-  text_label_1 = tk.Label(frame, text="Resultado: ")
-  text_label_1.place(x=195, y=370)
+
+  button_corregir = Button(frame, text="Corregir", width=20, command=lambda: corregir_respuestas(palabras_mostradas,entradas))
+  button_corregir.place(x=195, y=298)
+
+  resultado_label = tk.Label(frame, text="Resultado: ")
+  resultado_label.place(x=195, y=370)
+
+
+  juego2.mainloop()
+
 def juego3():
   root.destroy()
   juego2 = Tk()
