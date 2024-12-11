@@ -21,18 +21,16 @@ def menu():
   # Create the frame A and their content
   canvas.create_text(256, 60, text="Elige un juego", font=('Impact', -30), fill="white")
 
-
-
-
   # Create the frame B and their content
   button1 = ttk.Button(root, text="Piedra, papel o tijeras",command=juego1)
   canvas.create_window(256,200,anchor="center",window=button1)
-  button2 = ttk.Button(root, text="Traduce del ingles",command=juego2)
+  button2 = ttk.Button(root, text="Traduce del ingles", command=juego2)
   canvas.create_window(256,250,anchor="center",window=button2)
-  button3 = ttk.Button(root, text="Adivina el número")
+  button3 = ttk.Button(root, text="Adivina el número", command=juego3)
   canvas.create_window(256,300,anchor="center",window=button3)
   button4 = ttk.Button(root, text="Salir", command=root.destroy)
   canvas.create_window(256,350,anchor="center",window=button4)
+
   # Run mainloop
   root.mainloop()
 
@@ -41,6 +39,7 @@ def juego1():
   root.destroy()
   juego1root = Tk()
   juego1root.geometry("512x512")
+  juego1root.resizable(False, False)
   juego1root.title('Piedra, papel, tijeras')
   global canvas, player_option, computer_option
 
@@ -187,6 +186,7 @@ def juego2():
   root.destroy()
   juego2 = Tk()
   juego2.geometry("512x512")
+  juego2.resizable(False, False)
   juego2.title('Traduce del ingles')
 
   palabras_mostradas = random.sample(list(words.keys()), 5)
@@ -216,10 +216,34 @@ def juego2():
 
 def juego3():
   root.destroy()
-  juego2 = Tk()
-  juego2.geometry("512x512")
-  juego2.title('Adivina')
+  juego3 = Tk()
+  juego3.geometry("512x512")
+  juego3.resizable(False, False)
+  juego3.title('Adivina el número')
 
+  frame = tk.Frame(juego3, width=512, height=512)
+  frame.place(x=0, y=0)
+
+  title_label = tk.Label(frame, text="Adivina el número entre 0 y 200",font=("Arial", 18))
+  title_label.place(x=93, y=50)
+  #ttk.Separator(frame).place(x=0, y=90, relwidth=1)
+
+  text_label = tk.Label(frame, text="Número: ")
+  text_label.place(x=190, y=200)
+
+  entrada = tk.Entry(frame, width=6)
+  entrada.place(x=250, y=200)
+  ttk.Separator(frame).place(x=0, y=250, relwidth=1)
+
+  try_label = tk.Label(frame, text="Te queda 4 intentos")
+  try_label.place(x=190, y=270)
+  ttk.Separator(frame).place(x=0, y=310, relwidth=1)
+
+  button_corregir = Button(frame, text="Comprobar", width=20)
+                           #command=lambda: corregir_respuestas(palabras_mostradas, entradas))
+  button_corregir.place(x=195, y=330)
+
+  juego3.mainloop()
 
 root = Tk()
 menu()
